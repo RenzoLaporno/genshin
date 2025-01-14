@@ -2,6 +2,9 @@ export interface Characters {
   id: number
   chars: Character[];
 }
+export interface Name{
+  name:string
+}
 
 export interface Character {
     name: string;
@@ -70,5 +73,14 @@ export interface Weapons {
 }
 
 export interface Weapon {
-  name: string;
+  name: string
+  type: string
+  rarity: number
+  baseAttack: number
+  subStat: string
+  passiveName: string
+  passiveDesc: string
+  location: string
+  ascensionMaterial: string
+  id: string
 }
