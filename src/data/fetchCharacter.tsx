@@ -15,17 +15,3 @@ export const fetchAllCharacters = async (): Promise<Character[]> => {
   }
 };
 
-export const fetchAllCharactersBanner = async (): Promise<Character[]> => {
-  try {
-    const response = await fetch("https://genshin.jmp.blue/characters/xiao/card");
-    if (!response.ok) {
-      throw new Error("Network Response");
-    }
-    const data: Character[] = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error on fetch:", error);
-    throw error;
-  }
-};

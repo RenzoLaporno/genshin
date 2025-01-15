@@ -1,19 +1,24 @@
 import { Character } from "../../types/genshinTypes";
+import background from "../../assets/background.jpg";
+interface CardProps {
+  name: string;
+  image:string
+  rarity:number;
+  description:string;
+}
 
-export default function Card(character: Character) {
+const Card: React.FC<CardProps> = ({ name,image,description }) => {
+  console.log(image)
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg">
-      <img
-        className="w-full"
-        src="/img/card-top.jpg"
-        alt="Sunset in the mountains"
-      />
+    <div className=" rounded overflow-hidden shadow-lg bg-white">
+        <div className="flex justify-center items-center">
+        <img className="object-cover" src={image} alt="Image" />
+      </div>
+      
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{character.name} qerer</div>
+        <div className=" font-bold text-xl mb-2">{name}</div>
         <p className="text-gray-700 text-base">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus
-          quia, nulla! Maiores et perferendis eaque, exercitationem praesentium
-          nihil.
+        {description}
         </p>
       </div>
       <div className="px-6 pt-4 pb-2">
@@ -29,4 +34,5 @@ export default function Card(character: Character) {
       </div>
     </div>
   );
-}
+};
+export default Card;
