@@ -50,152 +50,85 @@ const App: React.FC = () => {
   };
 
   // console.log(red[rand2]);
-  const performWish = () => {
-    const rand = Math.random() * 100; // Generate a random number between 0 and 100
-    let pulledItem: Character | Weapon | null = null;
-
-    if (wishType === "character") {
-      if (pityCounterCharacter === 90 || last5StarCharacter) {
-        const fiveStarCharacters = characters.filter((x) => x.rarity === 5);
-        pulledItem =
-          fiveStarCharacters[
-            Math.floor(Math.random() * fiveStarCharacters.length)
-          ];
-        setLast5StarCharacter(false);
-        setPityCounterCharacter(0);
-      } else if (rand <= 1) {
-        const fiveStarCharacters = characters.filter((x) => x.rarity === 5);
-        pulledItem =
-          fiveStarCharacters[
-            Math.floor(Math.random() * fiveStarCharacters.length)
-          ];
-      } else if (rand <= 6 || pityCounterCharacter % 10 === 0) {
-        //
-        const fourStarCharacters = characters.filter((x) => x.rarity === 4);
-        pulledItem =
-          fourStarCharacters[
-            Math.floor(Math.random() * fourStarCharacters.length)
-          ];
-      } else {
-        const lowerRarityItems = weapons.filter(
-          (x) => x.rarity >= 1 && x.rarity <= 3
-        );
-        pulledItem =
-          lowerRarityItems[Math.floor(Math.random() * lowerRarityItems.length)];
-      }
-
-      setPityCounterCharacter((prev) => prev + 1);
-    } else if (wishType === "weapon") {
-      if (pityCounterWeapon === 80 || last5StarWeapon) {
-        const fiveStarWeapons = weapons.filter((x) => x.rarity === 5);
-        pulledItem =
-          fiveStarWeapons[Math.floor(Math.random() * fiveStarWeapons.length)];
-        setLast5StarWeapon(false);
-        setPityCounterWeapon(0);
-      } else if (rand <= 1) {
-        const fiveStarWeapons = weapons.filter((x) => x.rarity === 5);
-        pulledItem =
-          fiveStarWeapons[Math.floor(Math.random() * fiveStarWeapons.length)];
-        setLast5StarWeapon(true);
-        setPityCounterWeapon(0);
-      } else if (rand <= 6 || pityCounterCharacter % 10 === 0) {
-        const fourStarWeapons = weapons.filter((x) => x.rarity === 4);
-        pulledItem =
-          fourStarWeapons[Math.floor(Math.random() * fourStarWeapons.length)];
-      } else {
-        const lowerRarityItems = weapons.filter(
-          (x) => x.rarity >= 1 && x.rarity <= 3
-        );
-        pulledItem =
-          lowerRarityItems[Math.floor(Math.random() * lowerRarityItems.length)];
-      }
-
-      setPityCounterWeapon((prev) => prev + 1);
-    }
-
-    if (pulledItem) {
-      setPulledItems((prev) => [pulledItem, ...prev]);
-    }
-  };
-
-  const handleTenWishes = () => {
+  const performWish = (pulls: number = 1) => {
     const newPulledItems: (Character | Weapon)[] = [];
-
-    for (let i = 0; i < 10; i++) {
-      const rand = Math.random() * 100;
+    
+    for (let i = 0; i < pulls; i++) {
+      const rand = Math.random() * 100; // Generate a random number between 0 and 100
       let pulledItem: Character | Weapon | null = null;
-
+  
       if (wishType === "character") {
-        if (pityCounterCharacter === 90 || last5StarCharacter) {
+        if (pityCounterCharacter >= 90 || last5StarCharacter) {
+          // Guarantee a 5-star character if pity counter hits 90 or after a 5-star pull
           const fiveStarCharacters = characters.filter((x) => x.rarity === 5);
           pulledItem =
-            fiveStarCharacters[
-              Math.floor(Math.random() * fiveStarCharacters.length)
-            ];
+            fiveStarCharacters[Math.floor(Math.random() * fiveStarCharacters.length)];
           setLast5StarCharacter(false);
           setPityCounterCharacter(0);
         } else if (rand <= 1) {
+          // 1% chance for a 5-star character
           const fiveStarCharacters = characters.filter((x) => x.rarity === 5);
           pulledItem =
-            fiveStarCharacters[
-              Math.floor(Math.random() * fiveStarCharacters.length)
-            ];
+            fiveStarCharacters[Math.floor(Math.random() * fiveStarCharacters.length)];
           setLast5StarCharacter(true);
           setPityCounterCharacter(0);
         } else if (rand <= 6 || pityCounterCharacter % 10 === 0) {
+          // 5% chance for a 4-star character or 10-pity mechanism
           const fourStarCharacters = characters.filter((x) => x.rarity === 4);
           pulledItem =
-            fourStarCharacters[
-              Math.floor(Math.random() * fourStarCharacters.length)
-            ];
+            fourStarCharacters[Math.floor(Math.random() * fourStarCharacters.length)];
         } else {
+          // Default to lower rarity items
           const lowerRarityItems = weapons.filter(
             (x) => x.rarity >= 1 && x.rarity <= 3
           );
           pulledItem =
-            lowerRarityItems[
-              Math.floor(Math.random() * lowerRarityItems.length)
-            ];
+            lowerRarityItems[Math.floor(Math.random() * lowerRarityItems.length)];
         }
-
+  
+        // Increment the pity counter for each individual pull
         setPityCounterCharacter((prev) => prev + 1);
       } else if (wishType === "weapon") {
-        if (pityCounterWeapon === 80 || last5StarWeapon) {
+        if (pityCounterWeapon >= 80 || last5StarWeapon) {
+          // Guarantee a 5-star weapon if pity counter hits 80 or after a 5-star pull
           const fiveStarWeapons = weapons.filter((x) => x.rarity === 5);
           pulledItem =
             fiveStarWeapons[Math.floor(Math.random() * fiveStarWeapons.length)];
           setLast5StarWeapon(false);
           setPityCounterWeapon(0);
         } else if (rand <= 1) {
+          // 1% chance for a 5-star weapon
           const fiveStarWeapons = weapons.filter((x) => x.rarity === 5);
           pulledItem =
             fiveStarWeapons[Math.floor(Math.random() * fiveStarWeapons.length)];
           setLast5StarWeapon(true);
           setPityCounterWeapon(0);
-        } else if (rand <= 6 || pityCounterCharacter % 10 === 0) {
+        } else if (rand <= 6 || pityCounterWeapon % 10 === 0) {
+          // 5% chance for a 4-star weapon or 10-pity mechanism
           const fourStarWeapons = weapons.filter((x) => x.rarity === 4);
           pulledItem =
             fourStarWeapons[Math.floor(Math.random() * fourStarWeapons.length)];
         } else {
+          // Default to lower rarity items
           const lowerRarityItems = weapons.filter(
             (x) => x.rarity >= 1 && x.rarity <= 3
           );
           pulledItem =
-            lowerRarityItems[
-              Math.floor(Math.random() * lowerRarityItems.length)
-            ];
+            lowerRarityItems[Math.floor(Math.random() * lowerRarityItems.length)];
         }
-
+  
+        // Increment the pity counter for each individual pull
         setPityCounterWeapon((prev) => prev + 1);
       }
-
+  
       if (pulledItem) {
         newPulledItems.push(pulledItem);
       }
     }
-
+  
     setPulledItems((prev) => [...newPulledItems, ...prev]);
   };
+  
   const handleClick = (): void => {
     if (primo <= 160) {
       console.log("Not enough");
@@ -209,7 +142,7 @@ const App: React.FC = () => {
       console.log("Not enough");
     } else {
       setprimo(primo - 1600);
-      handleTenWishes();
+      performWish(10);
     }
   };
 
